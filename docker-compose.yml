@@ -1,4 +1,5 @@
 version: '3.8'
+
 services:
   mongo:
     image: mongo:6
@@ -11,6 +12,22 @@ services:
       MONGO_INITDB_DATABASE: youapp
     volumes:
       - mongo_data:/data/db
+
+  backend:
+    container_name: youapp-be
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: npm run start:dev
+    ports:
+      - "3005:3005"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+      - /app/node_modules
+    depends_on:
+      - mongo
 
 volumes:
   mongo_data:
