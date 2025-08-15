@@ -6,6 +6,9 @@ export class Profile extends Document {
     @Prop({ type: Types.ObjectId, ref: 'User', required: true, unique: true })
     userId: Types.ObjectId;
 
+    @Prop({ required: true, unique: true})
+    username: string;
+
     @Prop()
     age?: number;
 
@@ -22,7 +25,7 @@ export class Profile extends Document {
     birthday?: Date;
 
     @Prop()
-    horoscrope?: string;
+    horoscope?: string;
 
     @Prop()
     zodiac?: string;
