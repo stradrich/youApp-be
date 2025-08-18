@@ -5,6 +5,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { mongoConfig } from './configs/mongo.config';
 import { HealthModule } from './health/health.module';
+import { UserModule } from './users/user.module';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [
@@ -15,7 +17,9 @@ import { HealthModule } from './health/health.module';
       inject: [ConfigService],
       useFactory: mongoConfig,
     }),
-    HealthModule
+    HealthModule,
+    UserModule,
+    ProfileModule
   ],
   controllers: [AppController],
   providers: [AppService],
