@@ -23,13 +23,27 @@ services:
       - "3005:3005"
     env_file:
       - .env
-    environment:
-      DOCKER_ENV: true
     volumes:
       - .:/app
       - /app/node_modules
     depends_on:
       - mongo
+      - rabbitmq   # ✅ now depends on rabbitmq too
+
+  rabbitmq:
+    image: rabbitmq:3.13-management
+    container_name: youapp-rabbitmq
+    ports:
+      - "5672:5672"    # AMQP
+      - "15672:15672"  # Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
 volumes:
   mongo_data:
