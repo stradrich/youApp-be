@@ -1,11 +1,16 @@
-import { ConfigService } from '@nestjs/config';
+import { MongooseModuleOptions, MongooseOptionsFactory } from '@nestjs/mongoose';
 
-export const mongoConfig = async (configService: ConfigService) => {
-  const isDocker = configService.get<string>('DOCKER_ENV') === 'true';
+export class MongoConfigService implements MongooseOptionsFactory {
+  createMongooseOptions(): MongooseModuleOptions {
+    const isDocker = process.env.DOCKER_ENV === 'true';
 
-  const uri = isDocker
-    ? configService.get<string>('MONGODB_URI_DOCKER')
-    : configService.get<string>('MONGODB_URI');
+    const uri = isDocker
+      ? process.env.MONGODB_URI_DOCKER
+      : process.env.MONGODB_URI;
 
-  return { uri };
-};
+    return {
+      uri,
+      dbName: process.env.MONGO_DB || 'youapp',
+    };
+  }
+}
